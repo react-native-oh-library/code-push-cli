@@ -1,6 +1,6 @@
 {
-  "name": "@shm-open/code-push-cli",
-  "version": "2.6.5",
+  "name": "@react-native-oh-tpl/code-push-cli",
+  "version": "2.6.5-0.0.1",
   "description": "Management CLI for the CodePush service",
   "main": "bin/cli.js",
   "scripts": {
@@ -15,6 +15,9 @@
   "files": [
     "bin/"
   ],
+  "harmony": {
+    "alias": "code-push-cli"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/shm-open/code-push-cli"
