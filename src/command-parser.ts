@@ -339,6 +339,10 @@ var argv = yargs
                         'Adds app "MyApp", indicating that it\'s an iOS React Native app',
                     )
                     .example(
+                        'app add MyApp harmony react-native',
+                        'Adds app "MyApp", indicating that it\'s an Harmony React Native app',
+                    )
+                    .example(
                         'app add MyApp windows react-native',
                         'Adds app "MyApp", indicating that it\'s a Windows React Native app',
                     )
@@ -429,7 +433,8 @@ var argv = yargs
                 'debug android',
                 'View the CodePush debug logs for an Android emulator or device',
             )
-            .example('debug ios', 'View the CodePush debug logs for the iOS simulator');
+            .example('debug ios', 'View the CodePush debug logs for the iOS simulator')
+            .example('debug harmony', 'View the CodePush debug logs for the Harmony simulator');
 
         addCommonConfiguration(yargs);
     })
@@ -831,6 +836,10 @@ var argv = yargs
                     'Releases the Cordova iOS project in the current working directory to the "MyApp" app\'s "Staging" deployment',
                 )
                 .example(
+                    'release-cordova MyApp harmony',
+                    'Releases the Cordova Harmony project in the current working directory to the "MyApp" app\'s "Staging" deployment',
+                )
+                .example(
                     'release-cordova MyApp android -d Production',
                     'Releases the Cordova Android project in the current working directory to the "MyApp" app\'s "Production" deployment',
                 )
@@ -928,6 +937,10 @@ var argv = yargs
                 .example(
                     'release-react MyApp ios',
                     'Releases the React Native iOS project in the current working directory to the "MyApp" app\'s "Staging" deployment',
+                )
+                .example(
+                    'release-react MyApp harmony',
+                    'Releases the React Native Harmony project in the current working directory to the "MyApp" app\'s "Staging" deployment',
                 )
                 .example(
                     'release-react MyApp android -d Production -k ~/.ssh/codepush_rsa',

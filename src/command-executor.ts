@@ -183,10 +183,12 @@ function appAdd(command: cli.IAppAddCommand): Promise<void> {
         os = 'Android';
     } else if (normalizedOs === 'windows') {
         os = 'Windows';
+    } else if (normalizedOs === 'harmony') {
+        os = 'Harmony';
     } else {
         return Promise.reject<void>(
             new Error(
-                `"${command.os}" is an unsupported OS. Available options are "ios", "android", and "windows".`,
+                `"${command.os}" is an unsupported OS. Available options are "ios", "android", "windows" and "harmony".`,
             ),
         );
     }
@@ -1211,7 +1213,7 @@ export var releaseCordova = (command: cli.IReleaseCordovaCommand): Promise<void>
             var platformFolder: string = path.join(projectRoot, 'platforms', platform);
             var outputFolder: string;
 
-            if (platform === 'ios') {
+            if (platform === 'ios' || platform === 'harmony') {
                 outputFolder = path.join(platformFolder, 'www');
             } else if (platform === 'android') {
                 // Since cordova-android 7 assets directory moved to android/app/src/main/assets instead of android/assets
@@ -1229,7 +1231,7 @@ export var releaseCordova = (command: cli.IReleaseCordovaCommand): Promise<void>
                     outputFolder = path.join(platformFolder, 'assets', 'www');
                 }
             } else {
-                throw new Error('Platform must be either "ios" or "android".');
+                throw new Error('Platform must be either "ios","android" or "harmony".');
             }
 
             var cordovaCommand: string = command.build
@@ -1308,15 +1310,16 @@ export var releaseReact = (command: cli.IReleaseReactCommand): Promise<void> => 
                 switch (platform) {
                     case 'android':
                     case 'ios':
+                    case 'harmony':
                     case 'windows':
                         if (!bundleName) {
                             bundleName =
-                                platform === 'ios' ? 'main.jsbundle' : `index.${platform}.bundle`;
+                                platform === 'ios' || platform === 'harmony' ? 'main.jsbundle' : `index.${platform}.bundle`;
                         }
 
                         break;
                     default:
-                        throw new Error('Platform must be "android", "ios", or "windows".');
+                        throw new Error('Platform must be "android", "ios", "harmony" ,or "windows".');
                 }
 
                 try {
@@ -1410,8 +1413,8 @@ export var releaseReact = (command: cli.IReleaseReactCommand): Promise<void> => 
                             );
                         }
                     });
-                } else if (platform === 'ios') {
-                    return getiOSHermesEnabled(command.podFile).then((isHermesEnabled) => {
+                } else if (platform === 'ios' || platform === 'harmony') {
+                    return getiOSHermesEnabled(platform,command.podFile).then((isHermesEnabled) => {
                         if (isHermesEnabled) {
                             return runHermesEmitBinaryCommand(
                                 bundleName,
@@ -1548,11 +1551,11 @@ function throwForInvalidEmail(email: string): void {
 }
 
 function throwForInvalidSemverRange(semverRange: string): void {
-    if (!isValidRange(semverRange)) {
-        throw new Error(
-            'Please use a semver-compliant target binary version range, for example "1.0.0", "*" or "^1.2.3".',
-        );
-    }
+    // if (!isValidRange(semverRange)) {
+    //     throw new Error(
+    //         'Please use a semver-compliant target binary version range, for example "1.0.0", "*" or "^1.2.3".',
+    //     );
+    // }
 }
 
 function throwForInvalidOutputFormat(format: string): void {
