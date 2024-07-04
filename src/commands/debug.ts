@@ -101,6 +101,41 @@ class iOSDebugPlatform implements IDebugPlatform {
         return message;
     }
 }
+class HarmonyPlatform implements IDebugPlatform {
+    private getSimulatorID(): string {
+        const output: any = simctl.list({ devices: true, silent: true });
+        const simulators: string[] = output.json.devices
+            .map((platform: any) => platform.devices)
+            .reduce((prev: any, next: any) => prev.concat(next))
+            .filter((device: any) => device.state === 'Booted')
+            .map((device: any) => device.id);
+
+        return simulators[0];
+    }
+
+    public getLogProcess(): any {
+        if (process.platform !== 'darwin') {
+            throw new Error('harmony debug logs can only be viewed on OS X.');
+        }
+
+        const simulatorID: string = this.getSimulatorID();
+        if (!simulatorID) {
+            throw new Error('No harmony simulators found. Re-run this command after starting one.');
+        }
+
+        const logFilePath: string = path.join(
+            process.env.HOME,
+            'Library/Logs/CoreSimulator',
+            simulatorID,
+            'system.log',
+        );
+        return childProcess.spawn('tail', ['-f', logFilePath]);
+    }
+
+    public normalizeLogMessage(message: string): string {
+        return message;
+    }
+}
 
 const logMessagePrefix = '[CodePush] ';
 function processLogData(logData: Buffer) {
@@ -128,6 +163,7 @@ function processLogData(logData: Buffer) {
 const debugPlatforms: any = {
     android: new AndroidDebugPlatform(),
     ios: new iOSDebugPlatform(),
+    harmony: new HarmonyPlatform()
 };
 
 export default function (command: cli.IDebugCommand): Promise<void> {

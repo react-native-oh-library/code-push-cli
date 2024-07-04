@@ -28,7 +28,7 @@ export function getReactNativeProjectAppVersion(
 
     out.text(chalk.cyan(`Detecting ${command.platform} app version:\n`));
 
-    if (command.platform === 'ios') {
+    if (command.platform === 'ios' || command.platform === 'harmony') {
         let resolvedPlistFile: string = command.plistFile;
         if (resolvedPlistFile) {
             // If a plist file path is explicitly provided, then we don't
@@ -46,7 +46,7 @@ export function getReactNativeProjectAppVersion(
                 command.plistFilePrefix += '-';
             }
 
-            const iOSDirectory: string = 'ios';
+            const iOSDirectory: string = command.platform;
             const plistFileName = `${command.plistFilePrefix || ''}Info.plist`;
 
             const knownLocations = [
@@ -527,8 +527,8 @@ export async function getHermesEnabled(gradleFile?: string): Promise<boolean> {
     }
 }
 
-export function getiOSHermesEnabled(podFile: string): Promise<boolean> {
-    let podPath = path.join('ios', 'Podfile');
+export function getiOSHermesEnabled(platform: string,podFile: string): Promise<boolean> {
+    let podPath = path.join(platform, 'Podfile');
     if (podFile) {
         podPath = podFile;
     }
