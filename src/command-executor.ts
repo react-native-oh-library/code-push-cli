@@ -1551,11 +1551,11 @@ function throwForInvalidEmail(email: string): void {
 }
 
 function throwForInvalidSemverRange(semverRange: string): void {
-    // if (!isValidRange(semverRange)) {
-    //     throw new Error(
-    //         'Please use a semver-compliant target binary version range, for example "1.0.0", "*" or "^1.2.3".',
-    //     );
-    // }
+    if (!isValidRange(semverRange)) {
+        throw new Error(
+            'Please use a semver-compliant target binary version range, for example "1.0.0", "*" or "^1.2.3".',
+        );
+    }
 }
 
 function throwForInvalidOutputFormat(format: string): void {
